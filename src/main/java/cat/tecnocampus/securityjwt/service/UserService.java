@@ -20,19 +20,18 @@ public class UserService {
     }
 
     public ResponseEntity<String> createUser(UserCreationRequest request) {
-        // Validar el rol
+
         if (!request.role().equals("ADMIN") && !request.role().equals("USER") && !request.role().equals("MODERATOR")) {
             return ResponseEntity.badRequest().body("Invalid role. Role must be ADMIN, USER, or MODERATOR.");
         }
 
-        // Crear el nuevo usuario
+
         UserLab user = new UserLab(request.username(), request.email(), request.password());
 
-        // Asignar el rol
         Role role = new Role(ERole.valueOf(request.role()));
         user.getRoles().add(role);
 
-        // Guardar el usuario en la base de datos
+        // Guardar el usuari en la base de datos
         userLabRepository.save(user);
 
         return ResponseEntity.ok("User created successfully with role " + request.role());
